@@ -6,9 +6,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,6 +29,49 @@ public class BasicItemController {
     public String item(@PathVariable long itemId,Model model){
         Item findItem = itemRepository.findById(itemId);
         model.addAttribute("item",findItem);
+        return "basic/item";
+    }
+
+    @GetMapping("/add")
+    public String addForm(){
+
+        return "basic/addForm";
+    }
+//    @PostMapping("/add")
+    public String addItemV1(@RequestParam("itemName")String itemName,
+                       int price,
+                       Integer quantity,
+                       Model model){
+        Item item = new Item();
+        item.setQuantity(quantity);
+        item.setPrice(price);
+        item.setItemName(itemName);
+
+        Item save = itemRepository.save(item);
+
+        model.addAttribute("item",save);
+
+        return "basic/addForm";
+    }
+//    @PostMapping("/add")
+    public String addItemV2(@ModelAttribute("item2") Item item,
+                       Model model){
+        itemRepository.save(item);
+//        model.addAttribute("item",item); // LINE :: 자동 추가, 생략 가능
+        return "basic/addForm";
+    }
+//    @PostMapping("/add")
+    public String addItemV3(@ModelAttribute Item item2,
+                       Model model){
+        itemRepository.save(item2);
+//        model.addAttribute("item",item); // LINE :: 자동 추가, 생략 가능
+        return "basic/addForm";
+    }
+    @PostMapping("/add")
+    public String addItemV4(Item item2,
+                       Model model){
+        itemRepository.save(item2);
+//        model.addAttribute("item",item); // LINE :: 자동 추가, 생략 가능
         return "basic/item";
     }
 
